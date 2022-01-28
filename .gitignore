@@ -1,6 +1,7 @@
-part1/anecdotes/package-lock.json
-part1/anecdotes/yarn.lock
-part1/courseinfo/yarn.lock
-part1/courseinfo/package-lock.json
-part1/unicafe/package-lock.json
-part1/unicafe/yarn.lock
+/part1/anecdotes/package-lock.json
+/part1/anecdotes/yarn.lock
+/part1/courseinfo/yarn.lock
+/part1/courseinfo/package-lock.json
+/part1/unicafe/package-lock.json
+/part1/unicafe/yarn.lock
+/playground
