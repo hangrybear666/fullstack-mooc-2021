@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import PersonFilter from './components/PersonFilter'
@@ -10,15 +11,18 @@ const App = () => {
   const [nameFilter, setNameFilter] = useState('')
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', phone: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', phone: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', phone: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', phone: '39-23-6423122', id: 4 },
-    { name: 'Abra Nemesis', phone: '49-0160-91341023', id: 5 }
-  ])
+  const [persons, setPersons] = useState([])
   const [filteredPersons, setfilteredPersons] = useState(persons)
 
+  const hook = () => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+        setfilteredPersons(response.data)
+      })
+  }
+  useEffect(hook, [])
   /**
    * is called once the add button is clicked and
    * checks duplicate entry before submission to the person array
@@ -38,7 +42,7 @@ const App = () => {
     } else {
       const newEntry =  [
         { name: newName,
-          phone: newPhone,
+          number: newPhone,
           id: persons.length + 1 }
       ]
       setPersons(persons.concat(newEntry))
