@@ -23,9 +23,11 @@ const App = () => {
       })
   }
   useEffect(hook, [])
+
   /**
-   * is called once the add button is clicked and
-   * checks duplicate entry before submission to the person array
+   * is called once the add button is clicked.
+   * if name is already in the persons array, displays alert
+   * if name to be added is an empty string, displays alert
    * @param {event} e
    */
   const processSubmit = (e) => {
@@ -37,7 +39,9 @@ const App = () => {
         }
       }
     )
-    if (namePresent) {
+    if (newName === '') {
+      alert(`please provide a name`)
+    } else if (namePresent) {
       alert(`${newName} is already in the list`)
     } else {
       const newEntry =  [
