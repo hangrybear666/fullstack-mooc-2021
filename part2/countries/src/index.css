@@ -1,0 +1,54 @@
+/* Custom CSS because it's fun
+*/
+* {
+  font-family: Consolas, monaco, monospace;
+}
+
+body {
+  margin:0;
+  padding:0;
+}
+
+#root {
+  padding:20px;
+  margin:0;
+}
+
+.country-filter > input {
+  border: 1px solid black;
+  border-radius:0;
+  box-shadow: 2px 2px 4px 2px rgba(5, 11, 46, 0.4);
+}
+
+p.errorMsg {
+  font-style: italic;
+}
+
+.countryList {
+  list-style-type: none;
+  margin:0;
+  padding:0;
+}
+
+.additionalInfo > p{
+  white-space:pre;
+}
+
+.flagImg {
+  width:150px;
+  height:100px;
+}
+
+.countryList > p {
+  display:inline-block;
+}
+
+.countryList > button {
+  margin-left:10px;
+  padding-top:2px;
+  padding-bottom:2px;
+  padding-left:5px;
+  padding-right:5px;
+  border:1px solid black;
+  box-shadow: 1px 1px 2px 1px rgba(5, 11, 46, 0.4);
+}
