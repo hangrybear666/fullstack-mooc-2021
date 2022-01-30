@@ -18,7 +18,6 @@ function App() {
       // .get('http://localhost:3001/countries')
       .then(response => {
         setInitialCountries(response.data)
-        console.log(response.data)
       })
   }
   useEffect(hook, [])
