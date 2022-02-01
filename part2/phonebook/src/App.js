@@ -29,28 +29,36 @@ const App = () => {
 
   /**
    * is called once the add button is clicked.
-   * if name is already in the persons array, displays alert
+   * if name is already in the persons array, update its phone number 
    * if name to be added is an empty string, displays alert
    * @param {event} e
    */
   const processSubmit = (e) => {
     e.preventDefault();
     let namePresent = false
+    let updateId
     persons.forEach(person => {
-        if (person.name === newName) {
+        if (person.name === newName.trim()) {
           namePresent = true
+          updateId = person.id
         }
       }
     )
     if (newName === '') {
       alert(`please provide a name`)
     } else if (namePresent) {
-      alert(`${newName} is already in the list`)
-      // personService.update() // TODO
+      const personToUpdate = persons.find(person => person.id === updateId)
+      const updatedPerson = {...personToUpdate, number : newPhone.trim()}
+      personService
+        .update(updateId, updatedPerson)
+        .then(updatedEntry => {
+          setPersons(persons.map(person => person.id === updateId ? updatedEntry : person))
+          setfilteredPersons(filteredPersons.map(person => person.id === updateId ? updatedEntry : person))
+        })
     } else {
       const newEntry =
-        { name: newName,
-          number: newPhone,
+        { name: newName.trim(),
+          number: newPhone.trim(),
           id: persons.length + 1 }
       // persist to db.json
       personService
