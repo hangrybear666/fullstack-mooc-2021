@@ -5,6 +5,7 @@ import PersonForm from './components/PersonForm'
 import PersonFilter from './components/PersonFilter'
 import personService from './services/persons'
 import './App.css'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -16,6 +17,8 @@ const App = () => {
   const [newPhone, setNewPhone] = useState('')
   const [persons, setPersons] = useState([])
   const [filteredPersons, setfilteredPersons] = useState(persons)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [notificationMsg, setNotificationMsg] = useState(null)
 
   const hook = () => {
     axios
@@ -54,6 +57,15 @@ const App = () => {
         .then(updatedEntry => {
           setPersons(persons.map(person => person.id === updateId ? updatedEntry : person))
           setfilteredPersons(filteredPersons.map(person => person.id === updateId ? updatedEntry : person))
+          setNotificationMsg(`The person with name: ${updatedEntry.name} has been updated!`)
+          setTimeout(() => {
+            setNotificationMsg(null)
+          }, 5000)
+        }).catch(error => {
+          setErrorMessage(`The person with id ${updateId} cannot be found!`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
         })
     } else {
       const newEntry =
@@ -66,6 +78,10 @@ const App = () => {
         .then(addedPerson => {
           setPersons(persons.concat(addedPerson))
           setfilteredPersons(persons.concat(addedPerson))
+          setNotificationMsg(`The person with name:  ${addedPerson.name} has been inserted!`)
+          setTimeout(() => {
+            setNotificationMsg(null)
+          }, 5000)
         })
       // Reset Filter after addition
       setNameFilter('')
@@ -94,7 +110,7 @@ const App = () => {
       )
     )
   }
-
+ 
   const deletePersonFromDb = (e) => {
     if (window.confirm("Confirm Deletion?")) {
       personService
@@ -104,7 +120,12 @@ const App = () => {
               setPersons(persons.filter(person => person.id != e.target.id))
               setfilteredPersons(filteredPersons.filter(person => person.id != e.target.id))
               setNameFilter('')
-          }
+          } 
+        }).catch(error => {
+            setErrorMessage(`The person with id ${e.target.id} has already been deleted!\nPlease reload the page`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
         })
     }
   }
@@ -112,6 +133,8 @@ const App = () => {
   return (
     <>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} type="error"/>
+      <Notification message={notificationMsg} type="notification"/>
       <PersonFilter
         nameFilter={nameFilter}
         onFilter={filterPersonByName}
