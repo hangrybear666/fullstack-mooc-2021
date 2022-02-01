@@ -3,6 +3,9 @@ import axios from 'axios'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import PersonFilter from './components/PersonFilter'
+import personService from './services/persons'
+import './App.css'
+
 
 const App = () => {
   /**
@@ -43,15 +46,20 @@ const App = () => {
       alert(`please provide a name`)
     } else if (namePresent) {
       alert(`${newName} is already in the list`)
+      // personService.update() // TODO
     } else {
-      const newEntry =  [
+      const newEntry =
         { name: newName,
           number: newPhone,
           id: persons.length + 1 }
-      ]
-      setPersons(persons.concat(newEntry))
+      // persist to db.json
+      personService
+        .create(newEntry)
+        .then(addedPerson => {
+          setPersons(persons.concat(addedPerson))
+          setfilteredPersons(persons.concat(addedPerson))
+        })
       // Reset Filter after addition
-      setfilteredPersons(persons.concat(newEntry))
       setNameFilter('')
     }
   }
@@ -79,6 +87,20 @@ const App = () => {
     )
   }
 
+  const deletePersonFromDb = (e) => {
+    if (window.confirm("Confirm Deletion?")) {
+      personService
+        .deleteEntry(e.target.id)
+        .then(status => {
+          if (status === 200) {
+              setPersons(persons.filter(person => person.id != e.target.id))
+              setfilteredPersons(filteredPersons.filter(person => person.id != e.target.id))
+              setNameFilter('')
+          }
+        })
+    }
+  }
+
   return (
     <>
       <h2>Phonebook</h2>
@@ -97,7 +119,8 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons persons={filteredPersons}/>
+      <Persons persons={filteredPersons}
+                onClickDeleteFromDb={deletePersonFromDb}/>
     </>
   )
 }
