@@ -32,12 +32,15 @@ const App = () => {
 
   /**
    * is called once the add button is clicked.
-   * if name is already in the persons array, update its phone number 
+   * if name is already in the persons array, update its phone number
    * if name to be added is an empty string, displays alert
    * @param {event} e
    */
   const processSubmit = (e) => {
     e.preventDefault();
+    if (newName === '') {
+      alert(`please provide a name`)
+    }
     let namePresent = false
     let updateId
     persons.forEach(person => {
@@ -47,9 +50,10 @@ const App = () => {
         }
       }
     )
-    if (newName === '') {
-      alert(`please provide a name`)
-    } else if (namePresent) {
+    if (namePresent) {
+      /**
+       * user is found in the db. update phone number.
+       */
       const personToUpdate = persons.find(person => person.id === updateId)
       const updatedPerson = {...personToUpdate, number : newPhone.trim()}
       personService
@@ -57,33 +61,28 @@ const App = () => {
         .then(updatedEntry => {
           setPersons(persons.map(person => person.id === updateId ? updatedEntry : person))
           setfilteredPersons(filteredPersons.map(person => person.id === updateId ? updatedEntry : person))
-          setNotificationMsg(`The person with name: ${updatedEntry.name} has been updated!`)
-          setTimeout(() => {
-            setNotificationMsg(null)
-          }, 5000)
+          const message = `The person with name: ${updatedEntry.name} has been updated!`
+          notifyUser(message,false)
         }).catch(error => {
-          setErrorMessage(`The person with id ${updateId} cannot be found!`)
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 5000)
+          const message = `The person with id ${updateId} cannot be found!`
+          notifyUser(message, true)
         })
     } else {
+      /**
+       * new user is to be added to the db.
+       */
       const newEntry =
         { name: newName.trim(),
           number: newPhone.trim(),
           id: persons.length + 1 }
-      // persist to db.json
       personService
         .create(newEntry)
         .then(addedPerson => {
           setPersons(persons.concat(addedPerson))
           setfilteredPersons(persons.concat(addedPerson))
-          setNotificationMsg(`The person with name:  ${addedPerson.name} has been inserted!`)
-          setTimeout(() => {
-            setNotificationMsg(null)
-          }, 5000)
+          const message = `The person with name:  ${addedPerson.name} has been inserted!`
+          notifyUser(message, false)
         })
-      // Reset Filter after addition
       setNameFilter('')
     }
   }
@@ -110,7 +109,7 @@ const App = () => {
       )
     )
   }
- 
+
   const deletePersonFromDb = (e) => {
     if (window.confirm("Confirm Deletion?")) {
       personService
@@ -118,15 +117,32 @@ const App = () => {
         .then(status => {
           if (status === 200) {
               setPersons(persons.filter(person => person.id != e.target.id))
-              setfilteredPersons(filteredPersons.filter(person => person.id != e.target.id))
+              setfilteredPersons(persons.filter(person => person.id != e.target.id))
               setNameFilter('')
-          } 
+          }
         }).catch(error => {
-            setErrorMessage(`The person with id ${e.target.id} has already been deleted!\nPlease reload the page`)
-            setTimeout(() => {
-              setErrorMessage(null)
-            }, 5000)
+          const message = `The person with id ${e.target.id} has already been deleted!\nPlease reload the page`
+          notifyUser(message, true)
         })
+    }
+  }
+
+  /**
+   * helper function for sending perishable notifications to the user
+   * @param {string} message
+   * @param {boolean} isError
+   */
+  const notifyUser = (message, isError) => {
+    if (isError) {
+      setErrorMessage(message)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    } else {
+      setNotificationMsg(message)
+      setTimeout(() => {
+        setNotificationMsg(null)
+      }, 5000)
     }
   }
 
