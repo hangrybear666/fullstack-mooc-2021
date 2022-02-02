@@ -20,10 +20,10 @@ const App = () => {
   const [notificationMsg, setNotificationMsg] = useState(null)
 
   const hook = () => {
-    axios
-      .get('http://localhost:3001/persons')
+    personService
+      .getAll()
       .then(response => {
-        setPersons(response.data)
+        setPersons(response)
       })
   }
   useEffect(hook, [])
