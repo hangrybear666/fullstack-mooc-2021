@@ -16,7 +16,6 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [persons, setPersons] = useState([])
-  const [filteredPersons, setfilteredPersons] = useState(persons)
   const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMsg, setNotificationMsg] = useState(null)
 
@@ -25,7 +24,6 @@ const App = () => {
       .get('http://localhost:3001/persons')
       .then(response => {
         setPersons(response.data)
-        setfilteredPersons(response.data)
       })
   }
   useEffect(hook, [])
@@ -60,7 +58,6 @@ const App = () => {
         .update(updateId, updatedPerson)
         .then(updatedEntry => {
           setPersons(persons.map(person => person.id === updateId ? updatedEntry : person))
-          setfilteredPersons(filteredPersons.map(person => person.id === updateId ? updatedEntry : person))
           const message = `The person with name: ${updatedEntry.name} has been updated!`
           notifyUser(message,false)
         }).catch(error => {
@@ -79,7 +76,6 @@ const App = () => {
         .create(newEntry)
         .then(addedPerson => {
           setPersons(persons.concat(addedPerson))
-          setfilteredPersons(persons.concat(addedPerson))
           const message = `The person with name:  ${addedPerson.name} has been inserted!`
           notifyUser(message, false)
         })
@@ -95,19 +91,8 @@ const App = () => {
     setNewPhone(e.target.value)
   }
 
-  /**
-   * Checks whether or not the input text is included in the persons array and updates the filtered Array to match
-   * @param {event} e
-   */
-  const filterPersonByName = (e) => {
+  const filterChangeListener = (e) => {
     setNameFilter(e.target.value)
-    setfilteredPersons(
-      persons.filter(person =>
-        person.name.toLowerCase().includes(
-          e.target.value.toLowerCase().trim()
-          )
-      )
-    )
   }
 
   const deletePersonFromDb = (e) => {
@@ -117,8 +102,9 @@ const App = () => {
         .then(status => {
           if (status === 200) {
               setPersons(persons.filter(person => person.id != e.target.id))
-              setfilteredPersons(persons.filter(person => person.id != e.target.id))
               setNameFilter('')
+              const message = `The person with id ${e.target.id} has been deleted!`
+              notifyUser(message, false)
           }
         }).catch(error => {
           const message = `The person with id ${e.target.id} has already been deleted!\nPlease reload the page`
@@ -146,6 +132,11 @@ const App = () => {
     }
   }
 
+  /** filter persons */
+  const personsToShow = nameFilter.length === 0
+    ? persons
+    : persons.filter(person => person.name.toLowerCase().includes(nameFilter.toLowerCase().trim()))
+
   return (
     <>
       <h2>Phonebook</h2>
@@ -153,7 +144,7 @@ const App = () => {
       <Notification message={notificationMsg} type="notification"/>
       <PersonFilter
         nameFilter={nameFilter}
-        onFilter={filterPersonByName}
+        onFilter={filterChangeListener}
       />
 
       <h2>add a new Person</h2>
@@ -166,7 +157,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons persons={filteredPersons}
+      <Persons persons={personsToShow}
                 onClickDeleteFromDb={deletePersonFromDb}/>
     </>
   )
