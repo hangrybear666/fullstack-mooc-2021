@@ -1,5 +1,7 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3002/api/persons' // local node.js server run from different repo
+const baseUrl = '/api/persons' // online repo and online frontend build
+// const baseUrl = 'https://hangrybear666-nodejs-backend.herokuapp.com/api/persons' // online repo and local react development
+// const baseUrl = 'http://localhost:3002/api/persons' // local node.js server run from different repo
 // const baseUrl = 'http://localhost:3001/persons' // local json-server run via npm run server
 
 const getAll = () => {

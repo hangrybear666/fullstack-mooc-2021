@@ -79,10 +79,12 @@ const App = () => {
       personService
         .create(newEntry)
         .then(addedPerson => {
-          if (addedPerson) {
+          if (!addedPerson.error) {
             setPersons(persons.concat(addedPerson))
             const message = `The person with name:  ${addedPerson.name} has been inserted!`
             notifyUser(message, false)
+          } else {
+            notifyUser(addedPerson.error,true)
           }
         }).catch(error => {
           const message = error.message
