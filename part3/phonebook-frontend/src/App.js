@@ -65,7 +65,8 @@ const App = () => {
             notifyUser(updatedEntry.error,true)
           }
         }).catch(error => {
-          const message = error.message
+          // in case of validation failure the mongoose middleware will send data in the http response as an error
+          const message = error.response.data.error ? error.response.data.error : error.message
           notifyUser(message, true)
         })
     } else {
@@ -87,7 +88,8 @@ const App = () => {
             notifyUser(addedPerson.error,true)
           }
         }).catch(error => {
-          const message = error.message
+          // in case of validation failure the mongoose middleware will send data in the http response as an error
+          const message = error.response.data.error ? error.response.data.error : error.message
           notifyUser(message, true)
         })
       setNameFilter('')
