@@ -1,0 +1,75 @@
+###
+GET http://localhost:3002/api/blogs
+
+###
+POST http://localhost:3002/api/blogs
+content-type: application/json
+
+{
+    "title": "React patterns",
+    "author": "Michael Chan",
+    "url": "https://reactpatterns.com/",
+    "likes": 7
+  }
+###
+POST http://localhost:3002/api/blogs
+content-type: application/json
+
+  {
+    "title": "Go To Statement Considered Harmful",
+    "author": "Edsger W. Dijkstra",
+    "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+    "likes": 5
+  }
+###
+POST http://localhost:3002/api/blogs
+content-type: application/json
+
+  {
+    "title": "Canonical string reduction",
+    "author": "Edsger W. Dijkstra",
+    "url": "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+    "likes": 12
+  }
+###
+POST http://localhost:3002/api/blogs
+content-type: application/json
+
+  {
+    "title": "First class tests",
+    "author": "Robert C. Martin",
+    "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+    "likes": 10
+  }
+###
+POST http://localhost:3002/api/blogs
+content-type: application/json
+
+  {
+    "title": "TDD harms architecture",
+    "author": "Robert C. Martin",
+    "url": "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
+    "likes": 0
+  }
+###
+POST http://localhost:3002/api/blogs
+content-type: application/json
+
+  {
+    "title": "Type wars",
+    "author": "Robert C. Martin",
+    "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+    "likes": 2
+  }
+
+###
+PUT http://localhost:3002/api/blogs/4
+content-type: application/json
+
+{
+  "name": "Abra Fox",
+  "number": "012-42143123"
+}
+
+###
+DELETE http://localhost:3002/api/blogs/1
