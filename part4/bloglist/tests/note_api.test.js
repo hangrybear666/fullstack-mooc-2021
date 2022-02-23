@@ -126,6 +126,53 @@ test('adding a post without url results in status code 400 BAD REQUEST', async (
     .expect(400)
 })
 
+test('deleting a post with correct id succeeds', async () => {
+  const id = '621632c1e2ff1a4c633b66d3'
+
+  await api
+    .delete(`/api/blogs/${id}`)
+    .expect(200)
+})
+
+test('deleting a post with false id fails', async () => {
+  const id = 'asd'
+
+  await api
+    .delete(`/api/blogs/${id}`)
+    .expect(204)
+})
+
+test('updating a post with correct id succeeds', async () => {
+  const id = '621632c1e2ff1a4c633b66d3'
+  const blogToUpdate = {
+    title: "React patterns UPDATED",
+    author: "Michael Chan",
+    url: "https://reactpatterns.com/",
+    likes: 7,
+    id: "621632c1e2ff1a4c633b66d3"
+  }
+  await api
+    .put(`/api/blogs/${id}`)
+    .send(blogToUpdate)
+    .expect(200)
+
+})
+
+test('updating a post with false id fails', async () => {
+  const id = 'asd'
+  const blogToUpdate = {
+    title: "React patterns",
+    author: "Michael Chan",
+    url: "https://reactpatterns.com/",
+    likes: 7,
+    id: "621632c1e2ff1a4c633b66d3"
+  }
+  await api
+    .put(`/api/blogs/${id}`)
+    .send(blogToUpdate)
+    .expect(204)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
