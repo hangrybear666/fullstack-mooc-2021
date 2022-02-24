@@ -15,10 +15,17 @@ beforeEach(async () => {
    * user that is  associated with all blog posts
    */
   await User.deleteMany({})
-  const username = 'root'
-  const password = 'oijasjioijmoasd2123'
-  const passwordHash = await bcrypt.hash(password, 10)
-  const user = new User({ username: username, name: 'Superuser', passwordHash })
+
+  let username = 'admin'
+  let password = 'saefefasfawf'
+  let passwordHash = await bcrypt.hash(password, 10)
+  let user = new User({ username: username, name: 'Testuser', passwordHash })
+  await user.save()
+
+  username = 'root'
+  password = 'oijasjioijmoasd2123'
+  passwordHash = await bcrypt.hash(password, 10)
+  user = new User({ username: username, name: 'Superuser', passwordHash })
   await user.save()
 
   /**
@@ -190,7 +197,40 @@ test('deleting a post with correct id succeeds', async () => {
 
   await api
     .delete(`/api/blogs/${id}`)
+    .set('Authorization', authHeader)
     .expect(200)
+})
+
+test('deleting a post with invalid authorization header fails with status code 401 UNAUTHORIZED', async () => {
+  const response = await api.get('/api/blogs')
+  const blogs = response.body
+  const id = blogs[blogs.length-1].id
+
+  await api
+    .delete(`/api/blogs/${id}`)
+    .set('Authorization', 'bs authentication header')
+    .expect(401)
+})
+
+test('deleting a post with user that is not a creator fails with status code 401 UNAUTHORIZED', async () => {
+  const response = await api.get('/api/blogs')
+  const blogs = response.body
+  const id = blogs[blogs.length-1].id
+
+  const loginUser = {
+    username: 'admin',
+    password: 'saefefasfawf'
+  }
+  const authorizationString = 'bearer '
+  const loginResponse = await api
+    .post('/api/login')
+    .send(loginUser)
+  authHeader = authorizationString.concat(loginResponse.body.token)
+  const deleteResponse = await api
+    .delete(`/api/blogs/${id}`)
+    .set('Authorization', authHeader)
+    .expect(401)
+  expect(deleteResponse.body.error).toContain('Only the creator is allowed to delete their blog post')
 })
 
 test('deleting a post with false id results in error: malformatted id', async () => {
@@ -198,6 +238,7 @@ test('deleting a post with false id results in error: malformatted id', async ()
 
   const response = await api
     .delete(`/api/blogs/${id}`)
+    .set('Authorization', authHeader)
     .expect(400)
   expect(response.body.error).toContain('malformatted id')
 })

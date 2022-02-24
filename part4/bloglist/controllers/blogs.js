@@ -1,21 +1,6 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const logger = require('../utils/logger')
-const jwt = require('jsonwebtoken')
-const User = require('../models/user')
-
-/**
- *
- * @param {*} request
- * @returns jswt token generated from login to /api/login endpoint
- */
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7)
-  }
-  return null
-}
 
 /**
  * HTTP GET request to all blogs in db
@@ -44,13 +29,7 @@ blogsRouter.get('/', async  (request, response, next) => {
 blogsRouter.post('/', async (request, response, next) => {
   const { url, title, author, likes } = request.body
   try {
-    const token = getTokenFrom(request)
-    const decodedToken = jwt.verify(token, process.env.SECRET)
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: 'login token missing or invalid' })
-    }
-    // query user to receive ObjectID for "foreign key" reference of new blog entry
-    const user = await User.findById(decodedToken.id)
+    const user = request.user
     const blog = new Blog({
       title: title,
       author: author,
@@ -71,8 +50,16 @@ blogsRouter.post('/', async (request, response, next) => {
 
 blogsRouter.delete('/:id', async (request, response, next) => {
   try {
+    const blogToDelete = await Blog.findById(request.params.id)
+    if (request.user.id !== blogToDelete.user.toString()) {
+      const errorMsg = { error: 'Only the creator is allowed to delete their blog post' }
+      response.statusMessage = errorMsg.error
+      logger.error('ERROR: ', errorMsg.error)
+      response.status(401)
+      response.json(errorMsg)
+    }
     logger.info('received DELETE request deleting id : ', request.params.id)
-    const deletedBlog = await Blog.findOneAndRemove({ _id: request.params.id })
+    const deletedBlog = await Blog.findByIdAndRemove(request.params.id)
     if (!deletedBlog) {
       const errorMsg = { error: `Person with id ${request.params.id} not found.` }
       response.statusMessage = errorMsg.error
@@ -98,14 +85,7 @@ blogsRouter.put('/:id', async (request, response, next) => {
   }
   try {
     logger.info('received PUT request updating id : ', request.params.id)
-    // query user to receive ObjectID for "foreign key" reference of new blog entry
-    const token = getTokenFrom(request)
-    const decodedToken = jwt.verify(token, process.env.SECRET)
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: 'login token missing or invalid' })
-    }
-    // query user to receive ObjectID for "foreign key" reference of new blog entry
-    const user = await User.findById(decodedToken.id)
+    const user = request.user
     const filter = { _id: request.params.id }
     const update = {
       title: title,
