@@ -109,7 +109,7 @@ test('a valid blog can be added', async () => {
   )
 })
 
-test.only('a valid blog without authorization token results in STATUS 401 UNAUTHORIZED', async () => {
+test('a valid blog without authorization token results in STATUS 401 UNAUTHORIZED', async () => {
   const newBlog =   {
     title: 'Type wars',
     author: 'Robert C. Martin',
