@@ -155,7 +155,6 @@ test('updating a post with correct id succeeds', async () => {
     .put(`/api/blogs/${id}`)
     .send(blogToUpdate)
     .expect(200)
-
 })
 
 test('updating a post with false id fails', async () => {
@@ -171,6 +170,61 @@ test('updating a post with false id fails', async () => {
     .put(`/api/blogs/${id}`)
     .send(blogToUpdate)
     .expect(204)
+})
+
+test('updating a post with empty author fails', async () => {
+  const id = '621632c1e2ff1a4c633b66d3'
+  const blogToUpdate = {
+    title: "React patterns UPDATED",
+    author: "",
+    url: "https://reactpatterns.com/",
+    likes: 7,
+    id: "621632c1e2ff1a4c633b66d3"
+  }
+  await api
+    .put(`/api/blogs/${id}`)
+    .send(blogToUpdate)
+    .expect(400)
+})
+
+test('updating a post with empty url fails', async () => {
+  const id = '621632c1e2ff1a4c633b66d3'
+  const blogToUpdate = {
+    title: "React patterns UPDATED",
+    author: "Michael Chan",
+    url: "",
+    likes: 7,
+    id: "621632c1e2ff1a4c633b66d3"
+  }
+  await api
+    .put(`/api/blogs/${id}`)
+    .send(blogToUpdate)
+    .expect(400)
+})
+
+test('updating a post with no properties fails', async () => {
+  const id = '621632c1e2ff1a4c633b66d3'
+  const blogToUpdate = {
+  }
+  await api
+    .put(`/api/blogs/${id}`)
+    .send(blogToUpdate)
+    .expect(400)
+})
+
+test('updating a post with string as likes fails', async () => {
+  const id = '621632c1e2ff1a4c633b66d3'
+  const blogToUpdate = {
+    title: "React patterns UPDATED",
+    author: "Michael Chan UPDATED",
+    url: "https://reactpatterns.com/ UPDATED",
+    likes: "7asd",
+    id: "621632c1e2ff1a4c633b66d3"
+  }
+  await api
+    .put(`/api/blogs/${id}`)
+    .send(blogToUpdate)
+    .expect(400)
 })
 
 afterAll(() => {

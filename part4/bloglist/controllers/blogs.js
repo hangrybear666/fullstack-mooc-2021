@@ -42,42 +42,22 @@ blogsRouter.delete('/:id', async (request, response, next) => {
 })
 
 blogsRouter.put('/:id', async (request, response, next) => {
-  if (!request.body.url) {
-    const errorMsg = { error: 'no url provided in order to update' }
+  const { url, title, author, likes } = request.body
+  if (!url && !title &&  !likes && !author) {
+    const errorMsg = { error: 'no properties provided in order to update' }
     response.statusMessage = errorMsg.error
     console.log('ERROR: ', errorMsg.error)
-    response.status(204)
-    return response.json(errorMsg)
-  }
-  if (!request.body.title) {
-    const errorMsg = { error: 'no title provided in order to update' }
-    response.statusMessage = errorMsg.error
-    console.log('ERROR: ', errorMsg.error)
-    response.status(204)
-    return response.json(errorMsg)
-  }
-  if (!request.body.author) {
-    const errorMsg = { error: 'no author provided in order to update' }
-    response.statusMessage = errorMsg.error
-    console.log('ERROR: ', errorMsg.error)
-    response.status(204)
-    return response.json(errorMsg)
-  }
-  if (!request.body.likes) {
-    const errorMsg = { error: 'no likes provided in order to update' }
-    response.statusMessage = errorMsg.error
-    console.log('ERROR: ', errorMsg.error)
-    response.status(204)
+    response.status(400)
     return response.json(errorMsg)
   }
   try {
     logger.info('received PUT request updating id : ', request.params.id)
     const filter = { id: request.params.id }
     const update = {
-      title: request.body.title,
-      author: request.body.author,
-      url: request.body.url,
-      likes: request.body.likes
+      title: title,
+      author: author,
+      url: url,
+      likes: likes
     }
     const updatedPerson = await Blog.findOneAndUpdate(
       filter,
