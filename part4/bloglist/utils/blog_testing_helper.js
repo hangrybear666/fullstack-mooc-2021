@@ -1,4 +1,4 @@
-const dummy = (blogs) => {
+const dummy = (blogs) => {// eslint-disable-line
   return 1
 }
 
@@ -9,7 +9,7 @@ const sumOfLikes = (blogs) => {
     return blogs[0].likes
   } else {
     const initialvalue = 0
-    const result = blogs.reduce((previousValue, currentArrayObject, currentIndex, array) => {
+    const result = blogs.reduce((previousValue, currentArrayObject, currentIndex, array) => {// eslint-disable-line
       return previousValue + currentArrayObject.likes
     }, initialvalue)
     return result
@@ -44,7 +44,7 @@ const mostBlogs = (blogs) => {
   }
   else {
     let existingAuthorIndex = -1
-    blogs.forEach((blog, index, array) => {
+    blogs.forEach((blog, index, array) => {// eslint-disable-line
       existingAuthorIndex = authorBlogCount.map(e => e.author).indexOf(blog.author)
       if (existingAuthorIndex !== -1) {
         // console.log('author found!')
@@ -78,7 +78,7 @@ const mostLikes = (blogs) => {
   }
   else {
     let existingAuthorIndex = -1
-    blogs.forEach((blog, index, array) => {
+    blogs.forEach((blog, index, array) => { // eslint-disable-line
       existingAuthorIndex = authorLikeCount.map(e => e.author).indexOf(blog.author)
       if (existingAuthorIndex !== -1) {
         // console.log('author found!')

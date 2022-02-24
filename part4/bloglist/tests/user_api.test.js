@@ -11,7 +11,7 @@ describe('when there is initially one user in db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
 
-    const passwordHash = await bcrypt.hash('sekret', 10)
+    const passwordHash = await bcrypt.hash('oijasjioijmoasd2123', 10)
     const user = new User({ username: 'root', passwordHash })
 
     await user.save()
@@ -121,7 +121,7 @@ describe('when there is initially one user in db', () => {
     expect(usersAtEnd).toEqual(usersAtStart)
   })
 
-  test.only('creation fails if username is below length 3', async () => {
+  test('creation fails if username is below length 3', async () => {
     const usersAtStart = await helper.usersInDb()
 
     const newUser = {
@@ -141,7 +141,6 @@ describe('when there is initially one user in db', () => {
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toEqual(usersAtStart)
   })
-
 
 })
 

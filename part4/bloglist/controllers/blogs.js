@@ -42,7 +42,7 @@ blogsRouter.get('/', async  (request, response, next) => {
  * HTTP POST request to add blog in db
  */
 blogsRouter.post('/', async (request, response, next) => {
-  const { url, title, author, likes, userId } = request.body
+  const { url, title, author, likes } = request.body
   try {
     const token = getTokenFrom(request)
     const decodedToken = jwt.verify(token, process.env.SECRET)
@@ -72,8 +72,8 @@ blogsRouter.post('/', async (request, response, next) => {
 blogsRouter.delete('/:id', async (request, response, next) => {
   try {
     logger.info('received DELETE request deleting id : ', request.params.id)
-    const deletedPerson = await Blog.findOneAndRemove({ id: request.params.id })
-    if (!deletedPerson) {
+    const deletedBlog = await Blog.findOneAndRemove({ _id: request.params.id })
+    if (!deletedBlog) {
       const errorMsg = { error: `Person with id ${request.params.id} not found.` }
       response.statusMessage = errorMsg.error
       logger.error('ERROR: ', errorMsg.error)
@@ -88,7 +88,7 @@ blogsRouter.delete('/:id', async (request, response, next) => {
 })
 
 blogsRouter.put('/:id', async (request, response, next) => {
-  const { url, title, author, likes, userId } = request.body
+  const { url, title, author, likes } = request.body
   if (!url && !title &&  !likes && !author) {
     const errorMsg = { error: 'no properties provided in order to update' }
     response.statusMessage = errorMsg.error
@@ -99,8 +99,14 @@ blogsRouter.put('/:id', async (request, response, next) => {
   try {
     logger.info('received PUT request updating id : ', request.params.id)
     // query user to receive ObjectID for "foreign key" reference of new blog entry
-    const user = await User.findById(userId)
-    const filter = { id: request.params.id }
+    const token = getTokenFrom(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'login token missing or invalid' })
+    }
+    // query user to receive ObjectID for "foreign key" reference of new blog entry
+    const user = await User.findById(decodedToken.id)
+    const filter = { _id: request.params.id }
     const update = {
       title: title,
       author: author,
