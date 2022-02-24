@@ -1,0 +1,41 @@
+###
+POST http://localhost:3002/api/users
+content-type: application/json
+
+{
+  "username": "admin",
+  "name": "Herb Dean",
+  "password": "derp"
+}
+###
+POST http://localhost:3002/api/users
+content-type: application/json
+
+{
+    "username": "root",
+    "name": "Superuser",
+    "password": "salainen"
+}
+###
+POST http://localhost:3002/api/blogs
+content-type: application/json
+
+  {
+    "title": "Type wars",
+    "author": "Robert C. Martin",
+    "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+    "likes": 2,
+    "userId": "62179884991ef1f54771db67"
+  }
+
+###
+POST http://localhost:3002/api/blogs
+content-type: application/json
+
+  {
+    "title": "React Native",
+    "author": "Herbert D. Fowler",
+    "url": "http://derpmachinima/nfos/cor",
+    "likes": 6,
+    "userId": "62179884991ef1f54771db67"
+  }

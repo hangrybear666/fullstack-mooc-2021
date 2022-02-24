@@ -4,23 +4,30 @@ const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 
-const initialBlogs = [{"title":"React patterns","author":"Michael Chan","url":"https://reactpatterns.com/","likes":7,"id":"621632c1e2ff1a4c633b66d3"},{"title":"Go To Statement Considered Harmful","author":"Edsger W. Dijkstra","url":"http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html","likes":5,"id":"621632c3e2ff1a4c633b66d5"},{"title":"Canonical string reduction","author":"Edsger W. Dijkstra","url":"http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html","likes":12,"id":"621632c6e2ff1a4c633b66d7"},{"title":"First class tests","author":"Robert C. Martin","url":"http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll","likes":10,"id":"621632cae2ff1a4c633b66d9"},{"title":"TDD harms architecture","author":"Robert C. Martin","url":"http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html","likes":0,"id":"621632cce2ff1a4c633b66db"}]
+const initialUserId = '621795e2c8a6625d21649281'
+
+const initialBlogs = [
+  {"title":"React patterns","author":"Michael Chan","url":"https://reactpatterns.com/","likes":7,"id":"621632c1e2ff1a4c633b66d3","user":initialUserId},
+  {"title":"Go To Statement Considered Harmful","author":"Edsger W. Dijkstra","url":"http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html","likes":5,"id":"621632c3e2ff1a4c633b66d5","user":initialUserId},
+  {"title":"Canonical string reduction","author":"Edsger W. Dijkstra","url":"http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html","likes":12,"id":"621632c6e2ff1a4c633b66d7","user":initialUserId},
+  {"title":"First class tests","author":"Robert C. Martin","url":"http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll","likes":10,"id":"621632cae2ff1a4c633b66d9","user":initialUserId},
+  {"title":"TDD harms architecture","author":"Robert C. Martin","url":"http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html","likes":0,"id":"621632cce2ff1a4c633b66db","user":initialUserId}]
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  let noteObject = new Blog(initialBlogs[0])
-  await noteObject.save()
-  noteObject = new Blog(initialBlogs[1])
-  await noteObject.save()
-  noteObject = new Blog(initialBlogs[2])
-  await noteObject.save()
-  noteObject = new Blog(initialBlogs[3])
-  await noteObject.save()
-  noteObject = new Blog(initialBlogs[4])
-  await noteObject.save()
+  let blogObject = new Blog(initialBlogs[0])
+  await blogObject.save()
+  blogObject = new Blog(initialBlogs[1])
+  await blogObject.save()
+  blogObject = new Blog(initialBlogs[2])
+  await blogObject.save()
+  blogObject = new Blog(initialBlogs[3])
+  await blogObject.save()
+  blogObject = new Blog(initialBlogs[4])
+  await blogObject.save()
 })
 
-test('notes are returned as json', async () => {
+test('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
     .expect(200)
@@ -53,7 +60,8 @@ test('a valid blog can be added', async () => {
     title: "Type wars",
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-    likes: 2
+    likes: 2,
+    userId: initialUserId
   }
 
   await api
@@ -83,7 +91,8 @@ test('an added blog without a like count defaults to likes=0', async () => {
   const newBlog =   {
     title: "Self-Written-Trash",
     author: "Herb W. Dean",
-    url: "http://localhost:3002"
+    url: "http://localhost:3002",
+    userId: initialUserId
   }
 
   await api
@@ -104,7 +113,8 @@ test('adding a post without title results in status code 400 BAD REQUEST', async
   const newBlog =   {
     author: "Herb W. Dean",
     url: "http://localhost:3002",
-    likes: 4
+    likes: 4,
+    userId: initialUserId
   }
 
   await api
@@ -117,7 +127,8 @@ test('adding a post without url results in status code 400 BAD REQUEST', async (
   const newBlog =   {
     title: "Self-Written-Trash",
     author: "Herb W. Dean",
-    likes: 4
+    likes: 4,
+    userId: initialUserId
   }
 
   await api
@@ -149,7 +160,8 @@ test('updating a post with correct id succeeds', async () => {
     author: "Michael Chan",
     url: "https://reactpatterns.com/",
     likes: 7,
-    id: "621632c1e2ff1a4c633b66d3"
+    id: "621632c1e2ff1a4c633b66d3",
+    userId: initialUserId
   }
   await api
     .put(`/api/blogs/${id}`)
@@ -164,7 +176,8 @@ test('updating a post with false id fails', async () => {
     author: "Michael Chan",
     url: "https://reactpatterns.com/",
     likes: 7,
-    id: "621632c1e2ff1a4c633b66d3"
+    id: "621632c1e2ff1a4c633b66d3",
+    userId: initialUserId
   }
   await api
     .put(`/api/blogs/${id}`)
@@ -179,7 +192,8 @@ test('updating a post with empty author fails', async () => {
     author: "",
     url: "https://reactpatterns.com/",
     likes: 7,
-    id: "621632c1e2ff1a4c633b66d3"
+    id: "621632c1e2ff1a4c633b66d3",
+    userId: initialUserId
   }
   await api
     .put(`/api/blogs/${id}`)
@@ -194,7 +208,8 @@ test('updating a post with empty url fails', async () => {
     author: "Michael Chan",
     url: "",
     likes: 7,
-    id: "621632c1e2ff1a4c633b66d3"
+    id: "621632c1e2ff1a4c633b66d3",
+    userId: initialUserId
   }
   await api
     .put(`/api/blogs/${id}`)
@@ -219,7 +234,8 @@ test('updating a post with string as likes fails', async () => {
     author: "Michael Chan UPDATED",
     url: "https://reactpatterns.com/ UPDATED",
     likes: "7asd",
-    id: "621632c1e2ff1a4c633b66d3"
+    id: "621632c1e2ff1a4c633b66d3",
+    userId: initialUserId
   }
   await api
     .put(`/api/blogs/${id}`)

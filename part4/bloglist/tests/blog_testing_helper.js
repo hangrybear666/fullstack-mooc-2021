@@ -1,4 +1,4 @@
-const listHelper = require('../utils/list_helper')
+const listHelper = require('../utils/blog_testing_helper')
 
 describe ('blog test' , () => {
   test('dummy returns one', () => {
