@@ -29,6 +29,13 @@ blogsRouter.get('/', async  (request, response, next) => {
 blogsRouter.post('/', async (request, response, next) => {
   const { url, title, author, likes } = request.body
   try {
+    // test for user uniqueness
+    const existingBlog = await Blog.findOne({ title })
+    if (existingBlog) {
+      return response.status(400).json({
+        error: 'title must be unique'
+      })
+    }
     const user = request.user
     const blog = new Blog({
       title: title,
