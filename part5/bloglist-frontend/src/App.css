@@ -1,8 +1,23 @@
-button {
+.likeBtn {
   background-color: rgb(24, 26, 145);
   font-weight:bold;
   padding:4px;
   color:white;
+}
+
+.blogContainer {
+  width:50%;
+  padding-top: 6px;
+  padding-left: 5px;
+  padding-bottom:6px;
+  border: 1px solid black;
+  box-shadow: 3px 3px 3px rgba(107, 108, 124, 0.6);
+  margin-bottom: 8px;
+}
+
+.blogInfo {
+  white-space: pre;
+  display: inline-block;
 }
 
 .error {
