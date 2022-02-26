@@ -119,6 +119,7 @@ const App = () => {
       const created = await blogService.create(newBlog)
       if (created) {
         const blogList = new Array(...blogs.concat(created))
+        console.log(created)
         setBlogs(blogList)
         setNotificationMsg(`Your blog with the title ${newBlog.title} by ${newBlog.author} has been added.`)
         setTimeout(() => {
@@ -173,6 +174,7 @@ const App = () => {
         blogs={blogs}
         handleLike={handleLike}
         handleDelete={handleDelete}
+        user={user}
         display={user ? true : false}
       />
 

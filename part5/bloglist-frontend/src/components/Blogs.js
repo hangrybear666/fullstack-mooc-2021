@@ -1,6 +1,6 @@
 import Blog from '../components/Blog'
 
-const Blogs = ({ blogs, display, handleLike, handleDelete }) => {
+const Blogs = ({ blogs, display, handleLike, handleDelete, user }) => {
   const displayElement = display ? '' : 'none'
   return (
     <div style={{ display: displayElement}}>
@@ -8,7 +8,13 @@ const Blogs = ({ blogs, display, handleLike, handleDelete }) => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map(blog => {
-        return (<Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete} />)
+        return (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleLike={handleLike}
+            handleDelete={handleDelete}
+            user={user} />)
       })}
     </div>
   )

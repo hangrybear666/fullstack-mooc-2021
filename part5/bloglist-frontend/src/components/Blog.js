@@ -1,10 +1,14 @@
 import React from 'react'
 import { useState } from 'react'
-const Blog = ({ blog, handleLike, handleDelete }) => {
+const Blog = ({ blog, handleLike, handleDelete, user }) => {
   const [visible, setVisible] = useState(true)
 
   const viewInfo = { display: visible ? '' : 'none' }
   const hideInfo = { display: visible ? 'none' : '' }
+  let showDelete
+  if (user) {
+    showDelete = { display: blog.user.username === user.username ? '' : 'none' }
+  }
 
   return (
     <div className="blogContainer">
@@ -26,6 +30,7 @@ const Blog = ({ blog, handleLike, handleDelete }) => {
         </p>
         <p><i>created by {blog.user.username}|{blog.user.name}</i></p>
         <button
+          style={showDelete}
           onClick={() => handleDelete(blog)}>
           delete
         </button>
