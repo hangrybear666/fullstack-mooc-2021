@@ -1,17 +1,38 @@
+import React, { useState } from 'react'
 const BlogForm = ({
-  handleCreate,
-  title,
-  author,
-  url,
-  handleTitleChange,
-  handleAuthorChange,
-  handleUrlChange,
-  display
+  handleCreate
  }) => {
-  const displayElement = display ? '' : 'none'
+
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value.trim())
+  }
+  const handleAuthorChange = (event) => {
+    setAuthor(event.target.value.trim())
+  }
+  const handleUrlChange = (event) => {
+    setUrl(event.target.value.trim())
+  }
+  const createNewBlog = (event) => {
+    event.preventDefault()
+    const newBlog = {
+      title: title,
+      author: author,
+      url: url,
+      likes: 0
+    }
+    handleCreate(newBlog)
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
+
   return (
-    <div style={{ display: displayElement}}>
-      <form onSubmit={handleCreate}>
+    <div>
+      <form onSubmit={createNewBlog}>
         <div>
           title:
           <input

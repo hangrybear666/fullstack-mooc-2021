@@ -14,9 +14,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMsg, setNotificationMsg] = useState(null)
 
@@ -62,15 +59,8 @@ const App = () => {
     }
   }
 
-  const handleCreate = async (e) => {
-    e.preventDefault()
+  const handleCreate = async (newBlog) => {
     try {
-      const newBlog = {
-        title: title,
-        author: author,
-        url: url,
-        likes: 0
-      }
       /**
        * After Blog creation hide the blog creation form:
        * using the ref mechanism of React, which offers a reference to the component.
@@ -83,7 +73,7 @@ const App = () => {
       if (created) {
         const blogList = new Array(...blogs.concat(created))
         setBlogs(blogList)
-        setNotificationMsg(`Your blog with the title ${title} by ${author} has been added.`)
+        setNotificationMsg(`Your blog with the title ${newBlog.title} by ${newBlog.author} has been added.`)
         setTimeout(() => {
           setNotificationMsg(null)
         }, 5000)
@@ -100,15 +90,6 @@ const App = () => {
   }
   const handlePasswordChange = (event) => {
     setPassword(event.target.value.trim())
-  }
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value.trim())
-  }
-  const handleAuthorChange = (event) => {
-    setAuthor(event.target.value.trim())
-  }
-  const handleUrlChange = (event) => {
-    setUrl(event.target.value.trim())
   }
   const handleLogout = () => {
     setUser(null)
@@ -138,13 +119,6 @@ const App = () => {
       >
         <BlogForm
           handleCreate={handleCreate}
-          title={title}
-          author={author}
-          url={url}
-          handleTitleChange={handleTitleChange}
-          handleAuthorChange={handleAuthorChange}
-          handleUrlChange={handleUrlChange}
-          display={user ? true : false}
           blogs={blogs}/>
       </Togglable>
 
