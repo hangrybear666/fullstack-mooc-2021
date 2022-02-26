@@ -62,8 +62,7 @@ blogsRouter.delete('/:id', async (request, response, next) => {
       const errorMsg = { error: 'Only the creator is allowed to delete their blog post' }
       response.statusMessage = errorMsg.error
       logger.error('ERROR: ', errorMsg.error)
-      response.status(401)
-      response.json(errorMsg)
+      return response.status(401).json(errorMsg)
     }
     logger.info('received DELETE request deleting id : ', request.params.id)
     const deletedBlog = await Blog.findByIdAndRemove(request.params.id)
