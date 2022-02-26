@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-const Blog = ({blog}) => {
+const Blog = ({ blog, handleLike }) => {
   const [visible, setVisible] = useState(true)
 
   const viewInfo = { display: visible ? '' : 'none' }
@@ -20,9 +20,12 @@ const Blog = ({blog}) => {
       <div style={hideInfo}>
         <u style={{color: 'purple'}}>{blog.url}</u>&nbsp;
         <p>likes: <b style={{color: 'blue'}}>{blog.likes}</b>&nbsp;
-          <button className="likeBtn">like</button>
+          <button
+            value={blog}
+            onClick={() => handleLike(blog)}
+            className="likeBtn">like</button>
         </p>
-        <p><i>created by {blog.user.name}</i></p>
+        <p><i>created by {blog.user.username}|{blog.user.name}</i></p>
       </div>
       <div style={viewInfo} className="blogInfo">
         <button

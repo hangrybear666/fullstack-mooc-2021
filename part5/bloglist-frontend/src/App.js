@@ -59,6 +59,28 @@ const App = () => {
     }
   }
 
+  const handleLike = async (likedBlog) => {
+    try {
+      likedBlog.likes = likedBlog.likes+1
+      const liked = await blogService.like(likedBlog)
+      if (liked.status === 200) {
+        const updatedBlogs = blogs.map(blog => blog === likedBlog ? likedBlog : blog)
+        setBlogs(updatedBlogs)
+      } else {
+        setErrorMessage('Blog could not be liked.')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      }
+    } catch (exception) {
+      console.log(exception)
+      setErrorMessage('Blog could not be liked.')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   const handleCreate = async (newBlog) => {
     try {
       /**
@@ -124,6 +146,7 @@ const App = () => {
 
       <Blogs
         blogs={blogs}
+        handleLike={handleLike}
         display={user ? true : false}
       />
 
