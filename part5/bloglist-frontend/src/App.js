@@ -81,6 +81,31 @@ const App = () => {
     }
   }
 
+  const handleDelete = async (deletedBlog) => {
+    try {
+      const deletion = await blogService.deleteBlog(deletedBlog)
+      if (deletion.status === 200) {
+        const updatedBlogs = blogs.filter(blog => blog !== deletedBlog)
+        setBlogs(updatedBlogs)
+        setNotificationMsg(`The blog with the title ${deletedBlog.title} has been deleted.`)
+        setTimeout(() => {
+          setNotificationMsg(null)
+        }, 3000)
+      } else if (deletion.status === 401){
+        setErrorMessage('Blog can only be deleted by creator!')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      }
+    } catch (exception) {
+      console.log(exception.request.body)
+      setErrorMessage('Blog could not be deleted.')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   const handleCreate = async (newBlog) => {
     try {
       /**
@@ -147,6 +172,7 @@ const App = () => {
       <Blogs
         blogs={blogs}
         handleLike={handleLike}
+        handleDelete={handleDelete}
         display={user ? true : false}
       />
 
