@@ -73,7 +73,6 @@ const App = () => {
         }, 5000)
       }
     } catch (exception) {
-      console.log(exception)
       setErrorMessage('Blog could not be liked.')
       setTimeout(() => {
         setErrorMessage(null)
@@ -98,7 +97,6 @@ const App = () => {
         }, 5000)
       }
     } catch (exception) {
-      console.log(exception.request.body)
       setErrorMessage('Blog could not be deleted.')
       setTimeout(() => {
         setErrorMessage(null)
@@ -119,7 +117,6 @@ const App = () => {
       const created = await blogService.create(newBlog)
       if (created) {
         const blogList = new Array(...blogs.concat(created))
-        console.log(created)
         setBlogs(blogList)
         setNotificationMsg(`Your blog with the title ${newBlog.title} by ${newBlog.author} has been added.`)
         setTimeout(() => {
