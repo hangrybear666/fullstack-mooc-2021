@@ -79,16 +79,22 @@ const resolvers = {
   }, */
   Mutation: {
     addBook: async (root, args) => {
-      /* TODO UNIQUE TITLE */
-        /* if (books.find(e => e.title === args.title)) {
-        throw new GraphQLError('Title must be unique', {
+        if (args.title && (args.title.length < 5 || args.title.length > 20 )) {
+        throw new GraphQLError('Title must be between 5 and 20 characters', {
             extensions: {
                 code: 'BAD_USER_INPUT',
-                invalidArgs: args.name
+                invalidArgs: args.title
             }
         })
         }
-      */
+        if (args.author && (args.author.length < 4 || args.author.length > 25 )) {
+          throw new GraphQLError('Author must be between 4 and 25 characters', {
+              extensions: {
+                  code: 'BAD_USER_INPUT',
+                  invalidArgs: args.author
+              }
+          })
+          }
       let existingAuthor = await Author.findOne({ name: args.author })
       if (!existingAuthor) {
         const author = new Author({ name: args.author, born: null, bookCount: null })
@@ -120,7 +126,23 @@ const resolvers = {
       return book
     },
     editAuthor: async (root, args) => {
+        if (args.setBornTo && args.setBornTo.toString().length != 4 ) {
+          throw new GraphQLError('birthyear must be a number of size 4', {
+              extensions: {
+                  code: 'BAD_USER_INPUT',
+                  invalidArgs: args.setBornTo
+              }
+          })
+          }
         const author = await Author.findOne({ name: args.name })
+        if (!author) {
+          throw new GraphQLError('author cannot be found', {
+            extensions: {
+                code: 'BAD_USER_INPUT',
+                invalidArgs: args.name
+            }
+        })
+        }
         author.born = args.setBornTo
         try {
           await author.save()
