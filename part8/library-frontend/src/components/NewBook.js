@@ -1,34 +1,32 @@
 
-import {ALL_BOOKS, ALL_AUTHORS, NEW_BOOK} from '../queries/queries.js'
+import { ALL_BOOKS, ALL_AUTHORS, NEW_BOOK, BOOKS_BY_FAVORITE_GENRE, BOOKS_BY_GENRE } from '../queries/queries.js'
 import { useState } from 'react'
 import { InputText } from 'primereact/inputtext';
 
 import {Button} from 'primereact/button';
 import { useMutation  } from '@apollo/client'
-const NewBook = (props) => {
+const NewBook = ( { show, filteredGenre, favoriteGenre} ) => {
+  const [ createBook ] = useMutation(NEW_BOOK, {
+    refetchQueries: [
+      { query: ALL_AUTHORS },
+      { query: ALL_BOOKS },
+      { query: BOOKS_BY_GENRE, variables: {genre: filteredGenre} },
+      { query: BOOKS_BY_FAVORITE_GENRE, variables: {genre: favoriteGenre} },
+    ],
+  })
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
-  const [ createBook ] = useMutation(NEW_BOOK, {
-    refetchQueries: [ { query: ALL_AUTHORS }, { query: ALL_BOOKS } ],
-    /* update: (cache, response) => {
-      cache.updateQuery({ query: ALL_AUTHORS }, ({ allPersons }) => {
-        return {
-          allPersons: allPersons.concat(response.data.addPerson),
-        }
-      })
-  }, */
-  })
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
   const submit = async (event) => {
     event.preventDefault()
-    
+
     let newBook = {title, author, published, genres}
     console.log('add book...')
     console.log(JSON.stringify(newBook))

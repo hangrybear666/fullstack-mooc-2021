@@ -70,7 +70,7 @@ const App = () => {
       <Books show={page === 'books'} books={booksResult.data.allBooks}/>
       <Favorites show={page === 'favorites'} user={user} favoriteGenre={favoriteGenre} setUser={setUser} setFavoriteGenre={setFavoriteGenre}/>
       <Recommendations show={page === 'recommendations'} allBooks={booksResult.data.allBooks} setGenre={setGenre} genre={genre} queryResult={booksByGenreResult}/>
-      <NewBook show={page === 'add'}/>
+      <NewBook show={page === 'add'} filteredGenre={genre} favoriteGenre={favoriteGenre}/>
       <EditAuthorBirthyear show={page === 'edit author'} authors={authorsResult.data.allAuthors}/>
 
     </div>

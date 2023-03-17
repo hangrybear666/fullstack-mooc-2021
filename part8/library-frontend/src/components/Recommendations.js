@@ -1,12 +1,17 @@
 
-import { useState } from 'react'
 import FilteredBooks from './FilteredBooks'
 
 const Recommendations = ({ allBooks, show, genre, setGenre, queryResult }) => {
-
   if (!show) {
     return null
   }
+  if (queryResult.loading) {
+    return <h2>Loading</h2>
+  }
+  if (queryResult.error) {
+    return <h2>Error</h2>
+  }
+  queryResult.refetch({genre: genre})
 
   let allGenres = []
   allBooks.map((a) => (a.genres.map(g => (allGenres.push(g)))))

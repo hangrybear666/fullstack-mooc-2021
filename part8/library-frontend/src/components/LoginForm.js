@@ -8,20 +8,6 @@ const LoginForm = ({ setError, setToken }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [ login, result ] = useMutation(LOGIN,
-  /* {
-    refetchQueries: [ { query: ME }, { query: BOOKS_BY_FAVORITE_GENRE } ]
-  },
-  {
-    update: (cache, response) => {
-      cache.updateQuery({ query: BOOKS_BY_FAVORITE_GENRE }, ({ booksByFavGenre }) => {
-        console.log("!!!!!!!!!!!!!!")
-        console.log(response)
-        return {
-          booksByFavGenre: booksByFavGenre,
-          }
-        })
-      }
-    } */
   )
 
   /* eslint-disable */

@@ -35,7 +35,7 @@ query booksByGenre($genre: String) {
 }
 `
 const BOOKS_BY_FAVORITE_GENRE = gql`
-query booksByGenre($genre: String) {
+query booksByFavoriteGenre($genre: String) {
   allBooks(genre: $genre) {
     title
     published
