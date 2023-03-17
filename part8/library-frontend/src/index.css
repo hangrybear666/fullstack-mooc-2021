@@ -1,0 +1,49 @@
+html {
+    font-size: 1rem;
+}
+
+body {
+    margin: 0px;
+    height: 100%;
+    padding: 2rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #373636;
+    font-family: "Roboto";
+    font-weight: normal;
+    font-size:1.2em;
+    color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+div.btn-menu > button {
+    margin-right:10px;
+    padding:8px;
+    font-weight:bold;
+}
+
+form.addbook > span {
+    margin-top:2em;
+}
+form.addbook > span > label{
+    color:#000;
+}
+
+.genreStyle {
+    color:#fff;
+    font-size:1.2em;
+}
+
+ tr th {
+    font-size:1.1em;
+    padding:5px;
+}
+ tr td {
+    padding-right:20px;
+    padding-left:20px;
+    padding-top:5px;
+    padding-bottom:5px;
+    border:1px solid #fff;
+    text-align: center;
+}

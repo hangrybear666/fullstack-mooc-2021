@@ -108,8 +108,8 @@ const resolvers = {
             }
           })
         }
-        if (args.title && (args.title.length < 5 || args.title.length > 20 )) {
-        throw new GraphQLError('Title must be between 5 and 20 characters', {
+        if (args.title && (args.title.length < 5 || args.title.length > 40 )) {
+        throw new GraphQLError('Title must be between 5 and 40 characters', {
             extensions: {
                 code: 'BAD_USER_INPUT',
                 invalidArgs: args.title
@@ -235,7 +235,7 @@ const server = new ApolloServer({
 })
 
 startStandaloneServer(server, {
-  listen: { port: 4001 },
+  listen: { port: 4000 },
   context: async ({ req, res }) => {
     const auth = req ? req.headers.authorization : null
     if (auth && auth.startsWith('Bearer ')) {
